@@ -7,3 +7,7 @@ I use [this](https://github.com/QuentinCG/Arduino-Light-Dependent-Resistor-Libra
 ## Scheme
 
 <img src="scheme.png" width="300" alt="300">
+
+## TO-DO
+
+Actualy serial port is hard coded, add possibility to choose it.
