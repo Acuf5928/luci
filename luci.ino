@@ -15,6 +15,8 @@
 #define USED_PHOTOCELL LightDependentResistor::GL5537_2
 LightDependentResistor photocell(SENSOR, OTHER_RESISTOR, USED_PHOTOCELL);
 
+float light;
+
 bool statusLed = false;
 bool autoLed = true;
 
@@ -54,16 +56,13 @@ void loop()
   checkButton(BUTTON);
 
   if (autoLed == true) {
-    float light = LightDependentResistor::luxToFootCandles(photocell.getCurrentLux());
+    light = LightDependentResistor::luxToFootCandles(photocell.getCurrentLux());
     
     if (light <= LIGHT_LINE)  {
       statusLed = true;
     } else {
       statusLed = false;
     }
-    
-    Serial.println(light);
-    delay(500);
   }
   
   if (statusLed == true) {
@@ -91,6 +90,9 @@ void loop()
     inputString = "";
     stringComplete = false;
   }
+
+  Serial.println("{statusLed:\"" + (String)statusLed + "\",autoLed:\"" + (String)autoLed + "\",lux:\"" + (String)light + "\"}");
+  delay(500);
 }
 
 void serialEvent() {
