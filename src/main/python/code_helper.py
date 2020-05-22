@@ -1,6 +1,7 @@
 import time
 
 import serial
+import serial.tools.list_ports
 
 
 class MySerial:
@@ -26,6 +27,12 @@ class MySerial:
                 self.s = serial.Serial(port="COM19", baudrate=115200, timeout=.1)
             except Exception:
                 self.s = None
+
+    def listDevice(self):
+        list = []
+        for port in serial.tools.list_ports.comports(include_links=False):
+            list.append(port[0])
+        return list
 
 
 def reformatString(message):

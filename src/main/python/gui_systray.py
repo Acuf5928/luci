@@ -3,6 +3,8 @@ import PyQt5.QtWidgets as QtWidgets
 
 import sys
 
+import gui_settings
+
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
     def __init__(self, ctx):
@@ -41,10 +43,14 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.auto = self.menu.addAction("AUTO")
         self.auto.triggered.connect(self.setAUTO)
 
+        self.windows = self.menu.addAction("Settings")
+        self.windows.triggered.connect(self.openWindows)
+
         exitAction = self.menu.addAction("Exit")
         exitAction.triggered.connect(self.exit)
 
         self.setContextMenu(self.menu)
+
     # Set functions of all menu elements, from here:
     def setAUTO(self):
         self.ctx.serial().write(2)
@@ -54,6 +60,10 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
     def setOFF(self):
         self.ctx.serial().write(0)
+
+    def openWindows(self):
+        self.window = gui_settings.App(self.ctx)
+        self.window.show()
 
     def exit(self):
         sys.exit()

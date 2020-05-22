@@ -16,6 +16,9 @@ class AppContext(ApplicationContext):
     def run(self):
         return self.app.exec_()
 
+    def name(self):
+        return "Luci"
+
     def icon(self):
         return self.get_resource("images/led (1).png")
 
