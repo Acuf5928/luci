@@ -9,19 +9,34 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         super(SystemTrayIcon, self).__init__()
         self.ctx = ctx
         self.menu = QtWidgets.QMenu()
-        #self.activated.connect(self.iconActivated)
+        self.activated.connect(self.setMenu)
         self.setIcon(QtGui.QIcon(self.ctx.icon()))
         self.setMenu()
 
     # Init sysTray
     def setMenu(self):
+        status = self.ctx.status
         self.menu.clear()
 
-        self.on = self.menu.addAction("ON")
-        self.on.triggered.connect(self.setON)
+        if status is None:
+            self.on = self.menu.addAction("ON")
+            self.on.triggered.connect(self.setON)
 
-        self.off = self.menu.addAction("OFF")
-        self.off.triggered.connect(self.setOFF)
+            self.off = self.menu.addAction("OFF")
+            self.off.triggered.connect(self.setOFF)
+        else:
+
+            self.lux = self.menu.addAction("Lux: " + str(status["lux"]))
+            self.lux.setEnabled(False)
+
+            self.menu.addSeparator()
+
+            if status["statusLed"] is 0:
+                self.on = self.menu.addAction("ON")
+                self.on.triggered.connect(self.setON)
+            else:
+                self.off = self.menu.addAction("OFF")
+                self.off.triggered.connect(self.setOFF)
 
         self.auto = self.menu.addAction("AUTO")
         self.auto.triggered.connect(self.setAUTO)
@@ -30,7 +45,6 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         exitAction.triggered.connect(self.exit)
 
         self.setContextMenu(self.menu)
-
     # Set functions of all menu elements, from here:
     def setAUTO(self):
         self.ctx.serial().write(2)
@@ -43,7 +57,6 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
     def exit(self):
         sys.exit()
-
     # To here
 
 

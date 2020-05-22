@@ -36,7 +36,7 @@ class AppContext(ApplicationContext):
         status = self.serial().read()
 
         if status is "":
+            self.status = None
             return
 
         self.status = json.loads(status)
-
