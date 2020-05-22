@@ -1,0 +1,1 @@
+I created this script to control two sets of mono color LEDs via an arduino that accepts commands from a button, a brightness sensor and directly from the PC.
