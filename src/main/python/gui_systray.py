@@ -23,12 +23,18 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.off = self.menu.addAction("OFF")
         self.off.triggered.connect(self.setOFF)
 
+        self.auto = self.menu.addAction("AUTO")
+        self.auto.triggered.connect(self.setAUTO)
+
         exitAction = self.menu.addAction("Exit")
         exitAction.triggered.connect(self.exit)
 
         self.setContextMenu(self.menu)
 
     # Set functions of all menu elements, from here:
+    def setAUTO(self):
+        self.ctx.serial().write(2)
+
     def setON(self):
         self.ctx.serial().write(1)
 
