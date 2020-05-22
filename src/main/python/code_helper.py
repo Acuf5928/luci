@@ -5,7 +5,8 @@ import serial.tools.list_ports
 
 
 class MySerial:
-    def __init__(self):
+    def __init__(self, ctx):
+        self.ctx = ctx
         self.s = None
         self.checkSerial()
 
@@ -24,7 +25,7 @@ class MySerial:
     def checkSerial(self):
         if self.s is None:
             try:
-                self.s = serial.Serial(port="COM19", baudrate=115200, timeout=.1)
+                self.s = serial.Serial(port=self.ctx.port, baudrate=115200, timeout=.1)
             except Exception:
                 self.s = None
 

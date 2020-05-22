@@ -19,8 +19,6 @@ class AppContext(ApplicationContext):
         self.readKey()
         self.checkStatusBackground()
 
-
-
     def run(self):
         return self.app.exec_()
 
@@ -35,7 +33,7 @@ class AppContext(ApplicationContext):
 
     def serial(self):
         if self.serialOBJ is None:
-            self.serialOBJ = MySerial()
+            self.serialOBJ = MySerial(self)
 
         return self.serialOBJ
 
@@ -44,7 +42,10 @@ class AppContext(ApplicationContext):
 
     def checkStatusContinue(self):
         while True:
-            self.checkStatus()
+            try:
+                self.checkStatus()
+            except Exception:
+                pass
 
     def checkStatus(self):
         status = self.serial().read()
@@ -57,6 +58,8 @@ class AppContext(ApplicationContext):
 
     def setPort(self, port):
         self.port = port
+        self.serialOBJ = None
+        self.serial()
         self.saveKey()
 
     def setEnable(self, status):
