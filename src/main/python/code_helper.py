@@ -32,6 +32,7 @@ class MySerial:
         list = []
         for port in serial.tools.list_ports.comports(include_links=False):
             list.append(port[0])
+        list.sort()
         return list
 
 

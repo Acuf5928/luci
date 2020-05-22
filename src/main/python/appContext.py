@@ -1,5 +1,6 @@
 import _thread
 import json
+import os
 
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
@@ -11,16 +12,26 @@ class AppContext(ApplicationContext):
         super().__init__()
         self.status = None
         self.serialOBJ = None
+        self.port = None
+        self.statusLed = None
+        self.autoLed = None
+
+        self.readKey()
         self.checkStatusBackground()
+
+
 
     def run(self):
         return self.app.exec_()
 
-    def name(self):
+    def appName(self):
         return "Luci"
 
     def icon(self):
         return self.get_resource("images/led (1).png")
+
+    def keyPath(self):
+        return os.getenv('USERPROFILE') + "/." + self.appName()
 
     def serial(self):
         if self.serialOBJ is None:
@@ -43,3 +54,39 @@ class AppContext(ApplicationContext):
             return
 
         self.status = json.loads(status)
+
+    def setPort(self, port):
+        self.port = port
+        self.saveKey()
+
+    def setEnable(self, status):
+        self.statusLed = status
+        self.saveKey()
+
+    def setAuto(self, status):
+        self.autoLed = status
+        self.saveKey()
+
+    def readKey(self):
+        try:
+            with open(self.keyPath() + "/settings.json", "r") as read_file:
+                data = json.load(read_file)
+                self.port = data["port"]
+                self.statusLed = bool(data["statusLed"])
+                self.autoLed = bool(data["autoLed"])
+
+        except Exception:
+            self.port = ""
+            self.statusLed = False
+            self.autoLed = True
+
+    def saveKey(self):
+        data = {"statusLed": self.statusLed, "autoLed": self.autoLed, "port": self.port}
+        self.checkfolder(self.keyPath())
+
+        with open(self.keyPath() + "/settings.json", "w") as write_file:
+            json.dump(data, write_file, indent=4)
+
+    def checkfolder(self, path):
+        if not os.path.isdir(path):
+            os.mkdir(path)
