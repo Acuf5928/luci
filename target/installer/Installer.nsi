@@ -53,6 +53,7 @@ FunctionEnd
     !define MUI_FINISHPAGE_SHOWREADME
     !define MUI_FINISHPAGE_SHOWREADME_TEXT "Launch on startup"
     !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+    !define MUI_FINISHPAGE_SHOWREADME_FUNCTION "startup"
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_CONFIRM
