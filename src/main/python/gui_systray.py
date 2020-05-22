@@ -2,18 +2,16 @@ import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 
 import sys
-import _thread
 
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
-    def __init__(self, icon, parent=None):
-        QtWidgets.QSystemTrayIcon.__init__(self, icon, parent)
-        self.menu = QtWidgets.QMenu(parent)
-        self.icon = icon
+    def __init__(self, ctx):
+        super(SystemTrayIcon, self).__init__()
+        self.ctx = ctx
+        self.menu = QtWidgets.QMenu()
+        #self.activated.connect(self.iconActivated)
+        self.setIcon(QtGui.QIcon(self.ctx.icon()))
         self.setMenu()
-
-    def setSerial(self, serial):
-        self.serial = serial
 
     # Init sysTray
     def setMenu(self):
@@ -32,10 +30,10 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
     # Set functions of all menu elements, from here:
     def setON(self):
-        self.serial.write(1)
+        self.ctx.serial().write(1)
 
     def setOFF(self):
-        self.serial.write(0)
+        self.ctx.serial().write(0)
 
     def exit(self):
         sys.exit()
@@ -44,10 +42,8 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
 
 # Start gui_sysTray
-def main(image, serial):
-    app = QtWidgets.QApplication(sys.argv)
-    w = QtWidgets.QWidget()
-    trayIcon = SystemTrayIcon(QtGui.QIcon(image), w)
-    trayIcon.setSerial(serial)
+def main(appctxt):
+    trayIcon = SystemTrayIcon(appctxt)
     trayIcon.show()
-    sys.exit(app.exec_())
+    exit_code = appctxt.app.exec_()
+    sys.exit(exit_code)
