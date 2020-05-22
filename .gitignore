@@ -1,0 +1,7 @@
+.idea
+.vscode
+__pycache__
+target/**
+.pyc
+!target/installer
+!target/installer/Installer.nsi
