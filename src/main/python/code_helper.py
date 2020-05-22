@@ -1,51 +1,31 @@
 import time
 
 import serial
-import serial.tools.list_ports
 
 
 class MySerial:
-    def __init__(self, responseMessage="", sendMessage=""):
-        self.message = ""
-        if (responseMessage != "") & (sendMessage != ""):
-            self.search(responseMessage, sendMessage)
-        try:
-            self.s = serial.Serial(port="COM19", baudrate=9600, timeout=.1)
-        except Exception:
-            print(Exception)
+    def __init__(self):
+        self.s = None
+        self.checkSerial()
 
     def write(self, message):
         try:
+            self.checkSerial()
             self.s.write(reformatString(message))
         except Exception:
-            print(Exception)
+            pass
 
     def read(self):
-        for number in range(0, 5):
-            data = self.s.readline().decode()
-            print(data)
-            if data == "":
-                time.sleep(.5)
-            else:
-                self.message = data
-                break
+        self.checkSerial()
+        time.sleep(1)
+        return self.s.readline().decode()
 
-#WIP
-    def search(self, responseMessage, sendMessage):
-        ports = serial.tools.list_ports.comports(include_links=False)
-        for port in ports:
-            print(port)
+    def checkSerial(self):
+        if self.s is None:
             try:
-                with serial.Serial(port="COM13", baudrate=9600, timeout=.5) as s:
-
-                    time.sleep(.5)
-                    s.write(reformatString(sendMessage))
-
-                    if self.message == responseMessage:
-                        print(port)
-                    s.close()
-            except Exception as Ex:
-                print(Ex)
+                self.s = serial.Serial(port="COM19", baudrate=9600, timeout=.1)
+            except Exception:
+                self.s = None
 
 
 def reformatString(message):
@@ -54,7 +34,3 @@ def reformatString(message):
         return (strMessage + "\n").encode("utf8")
     else:
         return strMessage.encode("utf8")
-
-
-if __name__ == "__main__":
-    s = MySerial("iM HERE", "TROVATO")
