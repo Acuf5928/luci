@@ -1,6 +1,7 @@
 import _thread
 import json
 import os
+import time
 
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
@@ -17,6 +18,7 @@ class AppContext(ApplicationContext):
         self.autoLed = None
 
         self.readKey()
+        self.serial()
         self.checkStatusBackground()
 
     def run(self):
@@ -34,6 +36,14 @@ class AppContext(ApplicationContext):
     def serial(self):
         if self.serialOBJ is None:
             self.serialOBJ = MySerial(self)
+            time.sleep(2)
+
+            if self.autoLed:
+                self.serialOBJ.write(2)
+            elif self.statusLed:
+                self.serialOBJ.write(1)
+            elif not self.statusLed:
+                self.serialOBJ.write(0)
 
         return self.serialOBJ
 
