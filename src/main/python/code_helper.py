@@ -17,13 +17,13 @@ class MySerial:
 
     def read(self):
         self.checkSerial()
-        time.sleep(1)
+        time.sleep(.2)
         return self.s.readline().decode()
 
     def checkSerial(self):
         if self.s is None:
             try:
-                self.s = serial.Serial(port="COM19", baudrate=9600, timeout=.1)
+                self.s = serial.Serial(port="COM19", baudrate=115200, timeout=.1)
             except Exception:
                 self.s = None
 

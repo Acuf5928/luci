@@ -28,7 +28,7 @@ bool stringComplete = false;  // whether the string is complete
 void setup()
 {
   //Serial
-  Serial.begin(9600);
+  Serial.begin(115200);
   inputString.reserve(200);
 
   //First set of led
@@ -58,9 +58,9 @@ void loop()
   if (autoLed == true) {
     light = LightDependentResistor::luxToFootCandles(photocell.getCurrentLux());
     
-    if (light <= LIGHT_LINE)  {
+    if (light <= LIGHT_LINE - 0.10)  {
       statusLed = true;
-    } else {
+    } else if (light >= LIGHT_LINE) {
       statusLed = false;
     }
   }
@@ -91,8 +91,8 @@ void loop()
     stringComplete = false;
   }
 
-  Serial.println("{statusLed:\"" + (String)statusLed + "\",autoLed:\"" + (String)autoLed + "\",lux:\"" + (String)light + "\"}");
-  delay(500);
+  Serial.println("{\"statusLed\":" + (String)statusLed + ",\"autoLed\":" + (String)autoLed + ",\"lux\":" + (String)light + "}");
+  delay(300);
 }
 
 void serialEvent() {
