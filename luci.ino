@@ -10,7 +10,7 @@
 
 #define GND2 13
 #define SENSOR A4
-#define LIGHT_LINE 0.70
+#define LIGHT_LINE 0.60
 #define OTHER_RESISTOR 10000 //ohms
 #define USED_PHOTOCELL LightDependentResistor::GL5537_2
 LightDependentResistor photocell(SENSOR, OTHER_RESISTOR, USED_PHOTOCELL);
@@ -58,7 +58,7 @@ void loop()
   if (autoLed == true) {
     light = LightDependentResistor::luxToFootCandles(photocell.getCurrentLux());
     
-    if (light <= LIGHT_LINE - 0.10)  {
+    if (light <= LIGHT_LINE - 0.05)  {
       statusLed = true;
     } else if (light >= LIGHT_LINE) {
       statusLed = false;
@@ -104,10 +104,7 @@ void serialEvent() {
     // if the incoming character is a newline, set a flag so the main loop can
     // do something about it:
 
-    if (inputString == "TROVATO\n"){
-        Serial.println("iM HERE");
-        inputString = "";
-      } else if (inChar == '\n') {
+    if (inChar == '\n') {
       stringComplete = true;
     }
   }
